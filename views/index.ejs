@@ -126,7 +126,7 @@
 
                                 // Membuat tombol "Pesan Sekarang"
                                 const orderButton = document.createElement('a');
-                                orderButton.href = 'checkout';
+                                orderButton.href = `checkout/?idproduk=` + product.id;
                                 orderButton.classList.add('btn', 'btn-primary', 'mr-2');
                                 orderButton.textContent = 'Pesan Sekarang';
 
