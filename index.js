@@ -74,7 +74,7 @@ app.post('/proses_login', (req, res) => {
 
 // Route untuk halaman dashboard (hanya bisa diakses setelah login)
 app.get('/dashboard', requireLogin, (req, res) => {
-    res.send('Welcome to the dashboard!');
+   res.render('admin/dashboard', { title: 'Dashboard' });
 });
 
 // Route untuk logout
@@ -153,6 +153,11 @@ app.use('/component', express.static(path.join(__dirname, 'views/component')));
 // Define a route for the home page
 app.get('/', (req, res) => {
     res.render('index', { title: 'Halaman Utama' });
+});
+
+// Define a route for the home page
+app.get('/dashboard', (req, res) => {
+    res.render('admin/dashboard', { title: 'Dashboard' });
 });
 
 app.get('/cart', (req, res) => {
