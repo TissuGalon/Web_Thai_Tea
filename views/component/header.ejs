@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">ThaiTea</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="col-12 d-flex justify-content-between">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item" id="pesananItem" style="display: none;">
+                    <a class="nav-link" href="pesanan">Pesanan</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto" id="navbar">
+                <li class="nav-item" id="cartItem" style="display: none;">
+                    <a class="nav-link" href="cart"><i class="ti ti-shopping-cart"></i> 0</a>
+                </li>
+                <li class="nav-item" id="wishlistItem" style="display: none;">
+                    <a class="nav-link" href="wishlist"><i class="ti ti-heart"></i> 0</a>
+                </li>
+                <div class="mx-2"></div>
+                <li class="nav-item" id="usernameItem" style="display: none;">
+                    <a class="nav-link" href="#"><i class="ti ti-user"></i> <span id="username"></span></a>
+                </li>
+                <li class="nav-item" id="logoutItem" style="display: none;">
+                    <a class="btn btn-danger" href="/logout" id="logoutButton"><span class="fa fa-user"></span>
+                        Logout</a>
+                </li>
+                <li class="nav-item" id="loginItem">
+                    <a class="btn btn-primary" href="/login" id="loginButton"><span class="fa fa-user"></span> Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Melakukan AJAX request untuk memeriksa sesi pengguna
+        fetch('/check-session')
+            .then(response => response.json())
+            .then(data => {
+                const { userId, username } = data;
+
+                // Mendapatkan elemen-elemen navbar
+                const pesananItem = document.getElementById('pesananItem');
+                const cartItem = document.getElementById('cartItem');
+                const wishlistItem = document.getElementById('wishlistItem');
+                const usernameItem = document.getElementById('usernameItem');
+                const logoutItem = document.getElementById('logoutItem');
+                const loginItem = document.getElementById('loginItem');
+                const usernameSpan = document.getElementById('username');
+
+                // Menampilkan atau menyembunyikan elemen navbar berdasarkan status login
+                if (userId) {
+                    // Jika pengguna sudah login, tampilkan elemen yang sesuai
+                    pesananItem.style.display = 'block';
+                    cartItem.style.display = 'block';
+                    wishlistItem.style.display = 'block';
+                    usernameItem.style.display = 'block';
+                    logoutItem.style.display = 'block';
+                    loginItem.style.display = 'none';
+                    usernameSpan.textContent = username;
+                } else {
+                    // Jika pengguna belum login, tampilkan elemen login dan sembunyikan yang lainnya
+                    pesananItem.style.display = 'none';
+                    cartItem.style.display = 'none';
+                    wishlistItem.style.display = 'none';
+                    usernameItem.style.display = 'none';
+                    logoutItem.style.display = 'none';
+                    loginItem.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error checking session:', error));
+    });
+</script>

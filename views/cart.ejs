@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja</title>
+    <!-- NeoBrutalism CSS -->
+    <link href="https://cdn.jsdelivr.net/gh/rajnandan1/brutopia@latest/dist/assets/compiled/css/app.css"
+        rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Tabler Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('component/header') %>
+        <!-- Navbar -->
+
+        <!-- Shopping Cart -->
+        <div class="container mt-5">
+            <h2 class="mb-4">Keranjang Belanja</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Gambar</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    <!-- Data keranjang belanja akan dimasukkan di sini -->
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between">
+                <h4 id="totalPrice">Total: Rp 0</h4>
+                <button class="btn btn-primary">Lanjutkan ke Checkout</button>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <%- include('component/footer') %>
+            <!-- FOOTER -->
+
+            <!-- Bootstrap JS and dependencies -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <!-- Neo Brutalism -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                crossorigin="anonymous"></script>
+
+            <!-- Script to fetch and display cart items -->
+            <script>
+                document.addEventListener('DOMContentLoaded', async function () {
+                    try {
+                        // Fetch cart items from the server
+                        const response = await fetch('/getAllPesanan');
+                        const cartItems = await response.json();
+
+                        // Display cart items in the table
+                        const cartItemsContainer = document.getElementById('cartItems');
+                        let totalPrice = 0;
+
+                        for (let i = 0; i < cartItems.length; i++) {
+                            const item = cartItems[i];
+
+                            // Fetch product details for each item
+                            const productResponse = await fetch(`/getProductById?id=${item.produk_id}`);
+                            const productData = await productResponse.json();
+
+                            const row = `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td><img style="width: 10rem; height: auto;" src="${productData.gambar}" class="product-img" alt="${productData.nama_produk}"></td>
+                            <td>${productData.nama_produk}</td>
+                            <td>Rp ${productData.harga}</td>
+                            <td>${item.jumlah}</td>
+                            <td>Rp ${item.subtotal}</td>
+                            <td><button class="btn btn-danger btn-sm">Hapus</button></td>
+                        </tr>
+                    `;
+                            cartItemsContainer.innerHTML += row;
+
+                            // Calculate total price
+                            totalPrice += item.subtotal;
+                        }
+
+                        // Display total price
+                        document.getElementById('totalPrice').innerText = `Total: Rp ${totalPrice}`;
+                    } catch (error) {
+                        console.error('Error fetching cart items:', error);
+                    }
+                });
+            </script>
+
+</body>
+
+</html>

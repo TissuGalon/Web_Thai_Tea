@@ -1,4 +1,4 @@
-const connection = require('./koneksi');
+const connection = require('../koneksi');
 
 // Fungsi untuk mengambil semua data produk dari database
 function getAllProducts(callback) {
@@ -59,10 +59,12 @@ function deleteProduct(id, callback) {
     });
 }
 
+
+
 module.exports = {
     getAllProducts,
     getProductById,
     addProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
 };

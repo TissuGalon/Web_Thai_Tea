@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>
+        <%= title %>
+    </title>
     <!-- NeoBrutalism CSS -->
     <link href="https://cdn.jsdelivr.net/gh/rajnandan1/brutopia@latest/dist/assets/compiled/css/app.css"
         rel="stylesheet" crossorigin="anonymous">
@@ -36,22 +38,18 @@
     <div class="container login-container">
         <div class="login-form">
             <h2 class="text-center">Login</h2>
-            <form>
+            <form action="/proses_login" method="POST">
                 <div class="form-group">
                     <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                 </div>
-                <div class="form-group">
-                    <label for="password">Konfirmasi Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
             </form>
-            <a href="login.html" class="btn btn-secondary w-100 mt-2">Login</a>
+            <a href="/register" class="btn btn-secondary w-100 mt-2">Register</a>
         </div>
     </div>
 
@@ -71,14 +69,47 @@
         crossorigin="anonymous"></script>
 
 
+    <!-- AUTH NOTIFICATION -->
     <script>
-        fetch('/component/header.html')
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                if (urlParams.get('error') === 'password_mismatch') {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Password dan konfirmasi password tidak cocok!",
+                        icon: "error"
+                    });
+                } else if (urlParams.get('error') === 'internal_error') {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Terjadi kesalahan internal, silakan coba lagi.",
+                        icon: "error"
+                    });
+                }
+            } else if (urlParams.has('success') && urlParams.get('success') === 'registered') {
+                Swal.fire({
+                    title: "Success",
+                    text: "Registrasi berhasil! Silakan login.",
+                    icon: "success"
+                });
+            }
+        });
+    </script>
+    <!-- AUTH NOTIFICATION -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        fetch('/component/header.ejs')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
             });
 
-        fetch('/component/footer.html')
+
+        fetch('/component/footer.ejs')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('footer-container').innerHTML = data;

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <!-- NeoBrutalism CSS -->
+    <link href="https://cdn.jsdelivr.net/gh/rajnandan1/brutopia@latest/dist/assets/compiled/css/app.css"
+        rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Tabler Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('component/header') %>
+        <!-- Navbar -->
+
+        <!-- Order List -->
+        <div class="container mt-5">
+            <h2 class="mb-4">Daftar Pesanan Saya</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>No HP</th>
+                        <th>Alamat</th>
+                        <th>Produk</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Tanggal Pesan</th>
+                        <th>Status Pesanan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="pesanan-list">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div id="footer-container"></div>
+        <!-- FOOTER -->
+
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- Script to fetch data from endpoint -->
+        <script>
+            // Function to fetch userId from /check-session endpoint
+            function fetchUserIdAndData() {
+                fetch(`/check-session`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const userId = data.userId;
+                        fetchData(userId);
+                    })
+                    .catch(error => console.error('Error fetching userId:', error));
+            }
+
+            // Function to fetch data from endpoint
+            function fetchData(userId) {
+                fetch(`/getAllPesananByUserId?userId=${userId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const pesananList = document.getElementById('pesanan-list');
+                        pesananList.innerHTML = ''; // Clear previous data
+                        data.forEach((pesanan, index) => {
+                            const row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${pesanan.nama}</td>
+                                <td>${pesanan.noHp}</td>
+                                <td>${pesanan.alamat}</td>
+                                <td>${pesanan.produk}</td>
+                                <td>${pesanan.harga}</td>
+                                <td>${pesanan.jumlah}</td>
+                                <td>${pesanan.total}</td>
+                                <td>${pesanan.tanggalPesan}</td>
+                                <td>${pesanan.statusPesanan}</td>
+                                <td><button class="btn btn-danger" onclick="deletePesanan(${pesanan.id})">Hapus</button></td>
+                            </tr>`;
+                            pesananList.innerHTML += row;
+                        });
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }
+
+            // Function to delete pesanan
+            function deletePesanan(id) {
+                fetch(`/deletePesanan?id=${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // If deletion successful, fetch data again to update the list
+                            fetchUserIdAndData();
+                        } else {
+                            console.error('Failed to delete pesanan');
+                        }
+                    })
+                    .catch(error => console.error('Error deleting pesanan:', error));
+            }
+
+            // Call the function to fetch userId and data
+            fetchUserIdAndData();
+        </script>
+</body>
+
+</html>
