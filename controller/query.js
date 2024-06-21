@@ -133,8 +133,8 @@ function deletePesanan(id, callback) {
 }
 
 // Fungsi untuk mengubah status pesanan menjadi batal atau selesai berdasarkan ID
-function updatePesananStatus(id, status, callback) {
-    connection.query('UPDATE pesanan SET status = ? WHERE id = ?', [status, id], (error, results, fields) => {
+function updatePesananStatus(id, statuss, callback) {
+    connection.query('UPDATE pesanan SET status_pesanan = ? WHERE id = ?', [statuss, id], (error, results, fields) => {
         if (error) {
             callback(error);
             return;

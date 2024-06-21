@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #F8C794;">
-    <a class="navbar-brand" href="#">ThaiTea</a>
+    <a class="navbar-brand" href="../">ThaiTea</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item" id="pesananItem" style="display: none;">
-                    <a class="nav-link" href="pesanan">Pesanan</a>
+                    <a class="nav-link" href="../pesanan">Pesanan</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto" id="navbar">
@@ -58,8 +58,8 @@
                 if (userId) {
                     // Jika pengguna sudah login, tampilkan elemen yang sesuai
                     pesananItem.style.display = 'block';
-                    cartItem.style.display = 'block';
-                    wishlistItem.style.display = 'block';
+                    cartItem.style.display = 'none';
+                    wishlistItem.style.display = 'none';
                     usernameItem.style.display = 'block';
                     logoutItem.style.display = 'block';
                     loginItem.style.display = 'none';

@@ -24,10 +24,10 @@ function getPesananByUserId(userId, callback) {
 
 // Fungsi untuk menambahkan pesanan baru
 function addPesanan(pesanan, callback) {
-    const { user_id, nama, produk, jumlah, harga } = pesanan;
+    const { nama, nohp, alamat, tgl_pesan, status_pesanan, produk, jumlah, total, user_id } = pesanan;
     connection.query(
-        'INSERT INTO pesanan (user_id, nama, produk, jumlah, harga) VALUES (?, ?, ?, ?, ?)',
-        [user_id, nama, produk, jumlah, harga],
+        'INSERT INTO pesanan (nama, nohp, alamat, tgl_pesan, status_pesanan, produk, jumlah, total, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nama, nohp, alamat, tgl_pesan, status_pesanan, produk, jumlah, total, user_id],
         (error, results, fields) => {
             if (error) {
                 callback(error, null);
@@ -37,6 +37,7 @@ function addPesanan(pesanan, callback) {
         }
     );
 }
+
 
 // Fungsi untuk menghapus pesanan berdasarkan id
 function deletePesananById(id, callback) {

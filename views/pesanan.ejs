@@ -70,7 +70,7 @@
 
             // Function to fetch data from endpoint
             function fetchData(userId) {
-                fetch(`/getAllPesananByUserId?userId=${userId}`)
+                fetch(`/getAllPesanan/${userId}`)
                     .then(response => response.json())
                     .then(data => {
                         const pesananList = document.getElementById('pesanan-list');
@@ -85,8 +85,8 @@
                                 <td>${pesanan.harga}</td>
                                 <td>${pesanan.jumlah}</td>
                                 <td>${pesanan.total}</td>
-                                <td>${pesanan.tanggalPesan}</td>
-                                <td>${pesanan.statusPesanan}</td>
+                                <td>${pesanan.tgl_pesan}</td>
+                                <td>${pesanan.status_pesanan}</td>
                                 <td><button class="btn btn-danger" onclick="deletePesanan(${pesanan.id})">Hapus</button></td>
                             </tr>`;
                             pesananList.innerHTML += row;
@@ -97,7 +97,7 @@
 
             // Function to delete pesanan
             function deletePesanan(id) {
-                fetch(`/deletePesanan?id=${id}`, {
+                fetch(`/deletePesanan/${id}`, {
                     method: 'DELETE'
                 })
                     .then(response => {

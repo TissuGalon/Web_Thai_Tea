@@ -143,8 +143,8 @@
                                     <td>${pesanan.jumlah}</td>
                                     <td>${pesanan.total}</td>
                                     <td>${pesanan.tgl_pesan}</td>
-                                    <td><span class="badge bg-${pesanan.status === 'Pending' ? 'warning' : 'danger'}">${pesanan.status}</span></td>
-                                    <td><button class="btn btn-danger btn-sm">Batalkan</button></td>
+                                    <td><span class="badge bg-${pesanan.status_pesanan === 'Selesai' ? 'success' : 'warning'}">${pesanan.status_pesanan}</span></td>
+                                    <td><button class="btn btn-success btn-sm" onclick="updatePesananStatus(${pesanan.id}, 'Selesai')">Selesai</button></td>                                    
                                 </tr>`;
                     pesananTableBody.innerHTML += row;
                 });
@@ -164,14 +164,61 @@
                                     <td>${product.jenis}</td>
                                     <td>${product.gambar}</td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm">Edit</button>
-                                        <button class="btn btn-danger btn-sm">Hapus</button>
+                                        <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})">Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Hapus</button>
                                     </td>
                                 </tr>`;
                     productsTableBody.innerHTML += row;
                 });
             });
+
+        // Function to delete a product
+        function deleteProduct(productId) {
+            fetch(`/deleteProduct/${productId}`, {
+                method: 'DELETE',
+            }).then(response => {
+                // Handle response as needed
+                console.log('Product deleted successfully');
+                location.reload();
+                // Optionally, update UI after deletion
+            }).catch(error => {
+                console.error('Error deleting product:', error);
+            });
+        }
+
+        // Function to edit a product
+        function editProduct(productId) {
+            // Implement edit functionality here, e.g., open modal for editing
+            console.log(`Editing product with ID: ${productId}`);
+            // You can implement modal popup or redirect to edit page as needed
+        }
+
+
+
+        function updatePesananStatus(orderId, statuss) {
+            fetch(`/updatePesananStatus/${orderId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: statuss,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Pesanan status updated successfully');
+                        window.location.reload(); // Refresh page or update UI as needed
+                    } else {
+                        console.error('Failed to update pesanan status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating pesanan status:', error);
+                });
+        }
+
+
     </script>
+
 </body>
 
 </html>

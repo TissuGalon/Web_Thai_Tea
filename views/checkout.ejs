@@ -25,12 +25,14 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="...">
+                        <img src="../images/product/<%= produk.gambar %>" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">Product 1</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
-                                to
-                                additional content.</p>
+                            <h5 class="card-title">
+                                <%= produk.nama %>
+                            </h5>
+                            <p class="card-text">
+                                <%= produk.deskripsi %>
+                            </p>
 
 
                         </div>
@@ -39,36 +41,44 @@
                 <div class="col-md-9 p-3 ps-5">
                     <div>
                         <h2 class="mb-4">Checkout Product</h2>
-                        <form action="">
+                        <form action="/Proses_Checkout" method="POST">
                             <div class="form-group">
                                 <label for="name">Nama</label>
-                                <input type="text" class="form-control" id="name" placeholder="Masukkan nama Anda">
+                                <input type="text" class="form-control" id="name" name="nama"
+                                    placeholder="Masukkan nama Anda" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone">No HP</label>
-                                <input type="text" class="form-control" id="phone" placeholder="Masukkan nomor HP Anda">
+                                <input type="text" class="form-control" id="phone" name="nohp"
+                                    placeholder="Masukkan nomor HP Anda" required>
                             </div>
                             <div class="form-group">
                                 <label for="address">Alamat</label>
-                                <textarea class="form-control" id="address" rows="3"
-                                    placeholder="Masukkan alamat Anda"></textarea>
+                                <textarea class="form-control" id="address" name="alamat" rows="3"
+                                    placeholder="Masukkan alamat Anda" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="productName">Nama Produk</label>
-                                <input type="text" class="form-control" id="productName"
-                                    placeholder="Masukkan nama produk">
+                                <input type="text" class="form-control" id="productName" name="produk"
+                                    placeholder="Masukkan nama produk" readonly value="<%= produk.nama %>">
                             </div>
                             <div class="form-group">
                                 <label for="price">Harga</label>
-                                <input type="text" class="form-control" id="price" placeholder="Masukkan harga produk">
+                                <input type="text" class="form-control" id="price" name="harga"
+                                    placeholder="Masukkan harga produk" readonly value="<%= produk.harga %>">
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Jumlah</label>
-                                <input type="number" class="form-control" id="quantity"
-                                    placeholder="Masukkan jumlah produk">
+                                <input type="number" min="1" value="1" class="form-control" id="quantity" name="jumlah"
+                                    placeholder="Masukkan jumlah produk" required>
                             </div>
+                            <input type="hidden" name="total" value="<%= produk.harga %>">
+                            <input type="hidden" name="tgl_pesan" value="<%= new Date().toISOString().slice(0, 10) %>">
+                            <input type="hidden" name="user_id" value="1">
                             <button type="submit" class="btn btn-primary">Pesan Sekarang</button>
                         </form>
+
+
                     </div>
                 </div>
             </div>

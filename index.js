@@ -168,6 +168,17 @@ app.get('/checkout', (req, res) => {
     res.render('checkout', { title: 'Checkout' });
 });
 
+app.get('/checkout/:idproduk', (req, res) => {
+    // Mengambil nilai parameter dari URL menggunakan req.params
+    const idproduk = req.params.idproduk;
+    let sql = `SELECT * FROM produk WHERE id = ${idproduk}`;
+    // Menyediakan data ke template EJS
+     connection.query(sql, (err, result) => {
+        if (err) throw err;
+        res.render('checkout', { produk: result[0] });
+    });
+});
+
 app.get('/login', (req, res) => {
     res.render('login', { title: 'Login' });
 });
@@ -219,7 +230,7 @@ app.get('/getAllPesanan/:userId', (req, res) => {
     const userId = req.params.userId;
     query.getAllPesananByUserId(userId, (error, pesanan) => {
         if (error) {
-            res.status(500).json({ error: 'Internal Server Error' });
+            res.status(500).json({ error: 'I    nternal Server Error' });
             return;
         }
         res.json(pesanan);
@@ -272,7 +283,7 @@ app.delete('/deleteProduct/:id', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        res.json({ message: message });
+        res.redirect('/dashboard'); // Redirect ke dashboard
     });
 });
 
@@ -306,12 +317,12 @@ app.get('/getPesananById/:id', (req, res) => {
 // Endpoint untuk menambahkan pesanan baru
 app.post('/addPesanan', (req, res) => {
     const pesananData = req.body;
-    query.addPesanan(pesananData, (error, result) => {
+    addPesanan(pesananData, (error, result) => {
         if (error) {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        res.json({ message: 'Pesanan added successfully', id: result });
+        res.redirect('/pesanan'); // Redirect ke halaman pesanan setelah berhasil menambahkan pesanan
     });
 });
 
@@ -323,7 +334,7 @@ app.delete('/deletePesanan/:id', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        res.json({ message: 'Pesanan deleted successfully' });
+        res.redirect('/pesanan'); // Redirect ke halaman pesanan setelah berhasil menambahkan pesanan
     });
 });
 
@@ -343,8 +354,9 @@ app.put('/updatePesanan/:id', (req, res) => {
 // Endpoint untuk merubah status pesanan menjadi batal atau selesai
 app.put('/updatePesananStatus/:id', (req, res) => {
     const id = req.params.id;
-    const status = req.body.status;
-    query.updatePesananStatus(id, status, (error, result) => {
+    /* const status = req.body.status; */
+    const statuss = 'Selesai';
+    query.updatePesananStatus(id, statuss, (error, result) => {
         if (error) {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
@@ -421,3 +433,40 @@ app.delete('/deleteWishlist/:id', (req, res) => {
 
 
 /* END POINT */
+
+
+
+
+app.post('/Proses_Checkout', (req, res) => {
+    let data = {
+        nama: req.body.nama,
+        nohp: req.body.nohp,
+        alamat: req.body.alamat,
+        tgl_pesan: req.body.tgl_pesan,
+        status_pesanan: 'Dipesan',
+        produk: req.body.produk,
+        jumlah: req.body.jumlah,
+        total: req.body.total,
+        user_id: req.body.user_id
+    };
+    let sql = 'INSERT INTO pesanan SET ?';
+    connection.query(sql, data, (err, result) => {
+        if (err) throw err;
+        // Redirect to success page
+        res.redirect('/pesanan');
+    });
+});
+
+
+
+// Endpoint to mark order as completed (PUT request)
+app.put('/order_complete/:id', (req, res) => {
+    const orderId = parseInt(req.params.id);
+    // Update status_pesanan to 'Selesai' in pesananData (simulated database update)
+    pesananData.forEach(pesanan => {
+        if (pesanan.id === orderId) {
+            pesanan.status_pesanan = 'Selesai';
+        }
+    });
+    res.sendStatus(200); // Send status OK
+});

@@ -107,7 +107,7 @@
                                 // Membuat gambar kartu
                                 const cardImage = document.createElement('img');
                                 cardImage.classList.add('card-img-top');
-                                cardImage.src = 'https://via.placeholder.com/300';
+                                cardImage.src = `images/product/${product.gambar}`;
                                 cardImage.alt = 'Product Image';
 
                                 // Membuat bagian body kartu
@@ -126,7 +126,7 @@
 
                                 // Membuat tombol "Pesan Sekarang"
                                 const orderButton = document.createElement('a');
-                                orderButton.href = `checkout/?idproduk=` + product.id;
+                                orderButton.href = `checkout/` + product.id;
                                 orderButton.classList.add('btn', 'btn-primary', 'mr-2');
                                 orderButton.textContent = 'Pesan Sekarang';
 
@@ -151,8 +151,8 @@
                                 buttonContainer.classList.add('d-flex');
 
                                 // Menambahkan tombol ke dalam div
-                                buttonContainer.appendChild(addToCartButton);
-                                buttonContainer.appendChild(addToFavoriteButton);
+                                /*    buttonContainer.appendChild(addToCartButton);
+                                   buttonContainer.appendChild(addToFavoriteButton); */
 
                                 // Menambahkan semua elemen ke dalam kartu
                                 cardBody.appendChild(cardTitle);
