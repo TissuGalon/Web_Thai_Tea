@@ -238,9 +238,9 @@ app.get('/getAllPesanan/:userId', (req, res) => {
 });
 
 
-// Endpoint untuk mengambil produk berdasarkan ID
+// Endpoint untuk mendapatkan produk berdasarkan ID
 app.get('/getProductById/:id', (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id, 10);  // Convert to integer
     query.getProductById(id, (error, product) => {
         if (error) {
             res.status(500).json({ error: 'Internal Server Error' });
@@ -264,10 +264,14 @@ app.post('/addProduct', (req, res) => {
 
 // Endpoint untuk mengupdate produk berdasarkan ID
 app.put('/updateProduct/:id', (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id, 10);  // Convert to integer
     const productData = req.body;
+    console.log(`Updating product with ID: ${id}`);
+    console.log('Product Data:', productData);
+
     query.updateProduct(id, productData, (error, message) => {
         if (error) {
+            console.error('Error updating product:', error);
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }

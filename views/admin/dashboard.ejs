@@ -219,6 +219,108 @@
 
     </script>
 
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <div class="form-group">
+                            <label for="productName">Nama Produk</label>
+                            <input type="text" class="form-control" id="productName" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Harga</label>
+                            <input type="number" class="form-control" id="productPrice" name="harga" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Deskripsi</label>
+                            <textarea class="form-control" id="productDescription" name="deskripsi" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productType">Jenis</label>
+                            <input type="text" class="form-control" id="productType" name="jenis" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productImage">Gambar</label>
+                            <input type="text" class="form-control" id="productImage" name="gambar" required>
+                        </div>
+                        <input type="hidden" id="productId" name="id">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProductChanges()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        function editProduct(productId) {
+            fetch(`/getProductById/${productId}`)
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('productId').value = product.id;
+                    document.getElementById('productName').value = product.nama;
+                    document.getElementById('productPrice').value = product.harga;
+                    document.getElementById('productDescription').value = product.deskripsi;
+                    document.getElementById('productType').value = product.jenis;
+                    document.getElementById('productImage').value = product.gambar;
+
+                    $('#editProductModal').modal('show');
+                })
+                .catch(error => console.error('Error fetching product:', error));
+        }
+
+        function saveProductChanges() {
+            const productId = parseInt(document.getElementById('productId').value, 10);  // Convert to integer
+            const productData = {
+                nama: document.getElementById('productName').value,
+                harga: parseFloat(document.getElementById('productPrice').value),  // Ensure harga is a number
+                deskripsi: document.getElementById('productDescription').value,
+                jenis: document.getElementById('productType').value,
+                gambar: document.getElementById('productImage').value
+            };
+
+            fetch(`/updateProduct/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Product updated successfully');
+                        $('#editProductModal').modal('hide');
+                        location.reload(); // Refresh page or update UI as needed
+                    } else {
+                        console.error('Failed to update product');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating product:', error);
+                });
+        }
+
+
+
+
+    </script>
+
+
 </body>
 
 </html>

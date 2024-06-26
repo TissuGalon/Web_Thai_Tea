@@ -39,11 +39,16 @@ function addProduct(productData, callback) {
 
 // Fungsi untuk mengupdate data produk berdasarkan ID
 function updateProduct(id, productData, callback) {
-    connection.query('UPDATE produk SET ? WHERE id = ?', [productData, id], (error, results, fields) => {
+    console.log('Updating product in database with ID:', id);
+    console.log('Product Data:', productData);
+
+    connection.query('UPDATE produk SET ? WHERE id = ?', [productData, id], (error, results) => {
         if (error) {
+            console.error('Database error:', error);
             callback(error);
             return;
         }
+        console.log('Update results:', results);
         callback(null, 'Product updated successfully');
     });
 }
